@@ -11,8 +11,10 @@
 
 1. Install Docker Engine. In my case it is running on top of Debian (Proxmox container). [For more](https://docs.docker.com/engine/install/debian/)
 2. Update apt repository and upgrade packages if available:
-		`sudo apt update && sudo apt upgrade -y`
-3. Install Portainer for ease of use. [For more](https://docs.portainer.io/start/install-ce/server/docker/linux)
+
+   `sudo apt update && sudo apt upgrade -y`
+
+4. Install Portainer for ease of use. [For more](https://docs.portainer.io/start/install-ce/server/docker/linux)
 
 ### InfluxDB
 
@@ -66,17 +68,63 @@
 		`python3 --version`
 	If this returns value like '3.xx.x' then the python interpreter is available else install it
 		`sudo apt install python3 python3-pip`
-2. If you get `error: externally-managed-environment` refer https://www.jeffgeerling.com/blog/2023/how-solve-error-externally-managed-environment-when-installing-pip3
+2. If you get `error: externally-managed-environment` refer [Jeff Geerling blog](https://www.jeffgeerling.com/blog/2023/how-solve-error-externally-managed-environment-when-installing-pip3)
 3. 4. Create a directory in `/home` called `solis_logging` (you may keep anything). Copy `requirements.txt,` `solis_logging.py`, `secret.json` and `Dockerfile`.
 4. Install dependencies and libraries using requirements.txt:
 		`pip install -r requirements.txt`
-5. Modify the [[Dockerfile]] with appropriate Python version, python script name (if filename is changed) and secret.json.
-6. Modify [[secret.json]] with appropriate details that you copied earlier.
-7. Modify [[solis_logging.py]] with appropriate `TZ`,`START_TIME`,`END_TIME` and `refresh_time`.
+5. Modify the [Dockerfile](/src/Dockerfile) with appropriate Python version, python script name (if filename is changed) and working directory.
+6. Modify [secret.json](/src/secret.json) with appropriate details that you copied earlier.
+7. Modify [solis_logging.py](/src/solis_logging.py) with appropriate `TZ`,`START_TIME`,`END_TIME` and `refresh_time`.
 8. Comment / Uncomment necessary parameters. You may even add / remove as per your use case.
-9. Run the script and check whether it is able to add the data retrieved from Solis Cloud to the InfluxDB database.
+9. Run the script within docker and check whether it is able to add the data retrieved from Solis Cloud to the InfluxDB database.
 		`python3 solis_logging.py`
 10. If the script is successfully adding the data to InfluxDB, then proceed to configure Grafana for data visualization.
 
 ## Grafana
 
+1. First, create a Docker network (if you haven't already):
+		`docker network create monitoring`
+2. In portainer, click `Container`> `Add Container`
+	Name: `grafana`
+	Image: `grafana/grafana-oss:latest`
+	Port mapping: `3000:3000`
+	Network: `monitoring`
+	Volume: Create a new volume
+	    `/var/lib/grafana`
+3. After containers are running:
+	1. Access Grafana at [http://your-ip:3000](http://your-ip:3000)
+	2. Default login: admin/admin
+	3. You'll be prompted to change password
+4. To connect InfluxDB to Grafana:
+	1. Go to Configuration > Data Sources
+	2. Add data source > Select InfluxDB
+	3. Set these fields:
+			URL: `http://{your_influxdb_IP_address}:8086`
+			Organization: `yourorg`
+			Token: `token_that_you_generated_earlier`
+			Default Bucket: `yourbucket`
+			Version: Flux
+	4. Click "Save & Test"
+5. Go to `Dashboard` > `New` >`New Dashboard` > `Add Visualization`. Select your InfluxDB bucket as data source. 
+6. Now you can create dashboards in Grafana to visualize your solar data. Some example queries to get you started: 
+```
+from(bucket: "solar_metrics")
+  |> range(start: -24h)
+  |> filter(fn: (r) => r._measurement == "station_metrics")
+  |> filter(fn: (r) => r._field == "power")
+```
+	Here 'solar_metrics' is taken as an example bucket name, 'station_metrics' as example point name and 'power' as example field name.
+	
+7. Alternatively you can also import [[solis_grafana.json]] and set up the visualization.
+8. Go to `Dashboard` > `New` > `Import Dashboard`. Select `solis_grafana.json` file . Choose appropriate dashboard name, and InfluxDB source.
+9. Remember to change UID with appropriate values (some random characters+numbers except special values).
+
+	![grafana_json_uid](/img/grafana_json_uid.png)
+
+10. Click `Import`
+
+You will now be able to visualize the data from your InfluxDB.
+
+## Resources
+
+[You will find all the required files here](/src/)
