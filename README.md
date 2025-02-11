@@ -35,7 +35,7 @@ You may include any parameters that is supported by this API. For more: [SolisCl
 
 ## Procedure
 
-Refer [Procedure](/Procedure)
+Refer [Procedure](/Procedure.md)
 
 ## Issues
 
