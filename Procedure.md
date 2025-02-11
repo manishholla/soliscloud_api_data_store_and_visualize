@@ -1,7 +1,7 @@
 ## API Access
 
-1. I registered an account with Solis Cloud and raised a ticket for API access. Within 2 days they provided the access for it. Learn more: https://solis-service.solisinverters.com/en/support/solutions/articles/44002212561-api-access-soliscloud
-2. Go to [https://www.soliscloud.com/#/apiManage](https://www.soliscloud.com/#/apiManage).
+1. Register an account with Solis Cloud and raise a ticket for API access. Within 2 days they will provide the access for it. [Learn more](https://solis-service.solisinverters.com/en/support/solutions/articles/44002212561-api-access-soliscloud)
+2. Go to [SolisCloud API Manage](https://www.soliscloud.com/#/apiManage).
 3. Activate API management and agree with the usage conditions and do the rest.
 4. Note down the API Key, API Secret and URL in a notepad and keep it safe for later.
 
@@ -9,10 +9,10 @@
 
 ### Docker
 
-1. Install Docker Engine. In my case it is running on top of Debian (Proxmox container). For more: https://docs.docker.com/engine/install/debian/
+1. Install Docker Engine. In my case it is running on top of Debian (Proxmox container). [For more](https://docs.docker.com/engine/install/debian/)
 2. Update apt repository and upgrade packages if available:
 		`sudo apt update && sudo apt upgrade -y`
-3. Install Portainer for ease of use. For more: https://docs.portainer.io/start/install-ce/server/docker/linux
+3. Install Portainer for ease of use. [For more](https://docs.portainer.io/start/install-ce/server/docker/linux)
 
 ### InfluxDB
 
@@ -56,7 +56,9 @@
 	    `http://<your_vm_ip>:8086`
 	- Log in with the username and password you set.
 
-7. Navigate to `Load Data > API Tokens > Generate API Token > Custom API Token > Buckets` and choose the bucket where you want to write the data. Copy the generated token into a notepad.
+7. Navigate to `Load Data > API Tokens > Generate API Token > Custom API Token > "Name the token"> Buckets > "Select appropriate bucket" > "give read and write access"`. Click "Generate". Copy the generated token into a notepad.
+
+`Note: Don't use the "Copy to Clipboard" button to copy the token. You may face issues later. Just use the cursor to copy.`
 
 ## Python Code
 
