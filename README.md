@@ -1,6 +1,6 @@
 # SolisCloud API Data Graphing Panel
 
-![[Pasted image 20250210225832.png]]
+![grafana_panel](https://github.com/user-attachments/assets/471a02e9-0395-4dc5-9372-b168df6fd1c5)
 
 ## How?
 
