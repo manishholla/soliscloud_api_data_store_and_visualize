@@ -4,7 +4,7 @@
 
 ## How?
 
-Python implementation of SolisCloud data using `hultenvp\soliscloud_api` library, ``Docker`` container, `InfluxDB` and `Grafana`. The Python code running in a Docker container will periodically request data from the Solis Cloud using the API. This code will execute within a specific time frame, for example from 07:00  to 18:00 IST, and then stop. It will resume the same process again the next day.
+Python implementation of SolisCloud data using `hultenvp\soliscloud_api` library, ``Docker`` container, `InfluxDB` and `Grafana`. The Python code running in a Docker container will periodically request data from the Solis Cloud using the API. This code will execute within a specific time frame, for example from 07:00  to 18:00 IST, and pause. It will resume the same process again the next day.
 
 ## Why?
 
