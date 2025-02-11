@@ -125,6 +125,21 @@ from(bucket: "solar_metrics")
 
 You will now be able to visualize the data from your InfluxDB.
 
+## Containerize and Automate
+
+In order to containerize and automate the python script to run in background, we need to do a few more steps.
+
+1. Log into the machine running Docker and `cd` into the directory where the python script resides.
+2. Get the [Dockerfile](/src/Dockerfile), and [requirements.txt](/src/requirements.txt) and modify it accordingly.
+3. Run these commands:
+	1. `docker build -t solis-logging-app .`
+		- `solis-logging-app` is just the container name. Be sure to correct mention the python script name in the Dockerfile.
+		- `.` Specifies that the Dockerfile is in the current directory.
+	2. `docker run -d --name solis_logging solis-logging-app`
+		- `--name solis_logging` → Assigns the container a custom name: `solis_logging` (instead of a random name).
+		- `solis-logging-app` → Uses the `solis-logging-app` image to create the container. 
+4. That's it. You will now be able to run the python script automatically in the background. Just make sure to change `Restart Policies` from `None` to `Unless Stopped`.
+
 ## Resources
 
 [You will find all the required files here](/src/)
